@@ -1,0 +1,119 @@
+<div class="container-fluid">
+    <div class="d-flex flex-row justify-content-center" *ngIf="order">
+        <div class="d-flex flex-column mb-3" [ngClass]="layoutService.isDesktop() ? 'w-50 cnt-box' : 'w-100' ">
+            <div *ngIf="isShipped(order.status)" class="mb-3">
+                <h6>Get Excited!</h6>
+                <div>Fun stuff is headed your way.</div>
+            </div>
+            <div *ngIf="isShipmentDateChange" class="mb-3">
+                <h6>Headsup: The shipping date changed.</h6>
+                <div>Before we can complete your order, review the new shipping date to confirm if
+                    you're OK with it.
+                </div>
+            </div>
+            <!--section - order status-->
+            <app-status-view [status]="order.status"></app-status-view>
+
+            <!--section - Tracking details-->
+            <div>
+                <div *ngIf="isOrdered(order.status)">
+                    <!-- shipment change alert-->
+                    <div class="mb-3">Items ordered: {{order.items.length}}</div>
+                    <div *ngIf="isShipmentDateChange" class="d-flex flex-row mb-3">
+                        <div class="mr-2 warning-icon"><i class="material-icons">warning</i></div>
+                        <div>Don't forget to let us know if you accept the new ship date. We'll cance your order if we
+                            do not hear from you soon.</div>
+                    </div>
+                    <div class="mb-3">
+                        <ng-container [ngTemplateOutlet]="addressTemplate"
+                            [ngTemplateOutletContext]="{address:order.shipingAddress}">
+                        </ng-container>
+                    </div>
+                    <div class="mb-5" *ngFor="let estimatedShipItem of estimatedShipDateMap | keyvalue">
+                        <div *ngIf="estimatedShipItem.value[0].newEstimatedShipDateRange" class="mb-3">
+                            <div><b>New estimated ship date:</b></div>
+                            <div>{{estimatedShipItem.value[0].newEstimatedShipDateRange.fromDate | date:'EEE, MMM, dd'}}
+                                -
+                                {{estimatedShipItem.value[0].newEstimatedShipDateRange.toDate | date:'EEE, MMM, dd, yyyy'}}
+                            </div>
+                        </div>
+                        <div><b>Original estimated ship date:</b></div>
+                        <div class="mb-3">{{estimatedShipItem.key}}</div>
+
+                        <!-- action button for shipment date change-->
+                        <div *ngIf="!estimatedShipItem.value[0].userAcceptedDelay" class="d-flex"
+                            [ngClass]="layoutService.isDesktop() ? 'flex-row' : 'flex-column' ">
+                            <div [ngClass]="layoutService.isDesktop() ? 'mr-2' : 'mb-2' "><button type="button"
+                                    class="btn btn-primary"
+                                    [ngClass]="layoutService.isDesktop() ? '' : 'btn-block' ">Accept new ship
+                                    date</button></div>
+                            <div><button type="button " class="btn border-btn"
+                                    [ngClass]="layoutService.isDesktop() ? '' : 'btn-block' ">Cancel your order</button>
+                            </div>
+                        </div>
+
+                        <div *ngFor="let item of estimatedShipItem.value">
+                            <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item:item}">
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <!--order shipped status-->
+                <div *ngIf="isShipped(order.status)">
+                    <div class="mb-3">Items shipped: {{order.items.length}}</div>
+                    <div *ngFor="let shipement of order.shipments">
+                        <div>
+                            <h6>{{shipement.carrier}} Tracking: </h6>
+                        </div>
+                        <div class="mb-3"><a href={{shipement.trackingUrl}}
+                                target="blank">{{shipement.trackingNumber}}</a></div>
+                        <div><b>Estimate Delivery Date:</b></div>
+                        <div class="mb-2">{{shipement.estimatedDeliveryDate | date:'EEE, MMM, dd, yyyy'}}</div>
+                        <div class="mb-3">
+                            <ng-container [ngTemplateOutlet]="addressTemplate"
+                                [ngTemplateOutletContext]="{address:order.shipingAddress}">
+                            </ng-container>
+                        </div>
+                        <!-- item details-->
+                        <div *ngFor="let itemId of shipement.items">
+                            <ng-container [ngTemplateOutlet]="itemTemplate"
+                                [ngTemplateOutletContext]="{item:getItemById(itemId)}">
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Address Template-->
+<ng-template #addressTemplate let-address="address">
+    <div class="d-flex flex-row">
+        <div class="mr-2"><b>Address: </b></div>
+        <div class="d-flex flex-column">
+            <div>{{address.street}},</div>
+            <div>{{address.city}}, {{address.state}} {{address.zip}}</div>
+        </div>
+    </div>
+</ng-template>
+
+<!--Item Template-->
+<ng-template #itemTemplate let-item="item">
+    <div class="d-flex flex-row product-box">
+        <div class="mr-3">
+            <img width="60" class="img-fluid" src="..\..\assets\images\iPhone_12_BLU_.png">
+        </div>
+        <div class="d-flex flex-column">
+            <div>
+                <h6>{{item.name}} - {{item.skuAttributes.size}}</h6>
+            </div>
+            <div>
+                <h6>{{item.skuAttributes.color}}</h6>
+            </div>
+            <div>Quantity: {{item.quantity}}</div>
+            <div *ngIf="item.telephoneNumber">{{item.telephoneNumber}}</div>
+        </div>
+    </div>
+</ng-template>

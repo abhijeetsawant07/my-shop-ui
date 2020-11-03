@@ -1,0 +1,64 @@
+<nav role="navigation" id="nav">
+    <input class="trigger" type="checkbox" id="mainNavButton">
+    <label for="mainNavButton" onclick>Menu</label>
+    <ul class="mobile-only">
+        <li *ngFor="let navItem of leftNavItems">
+            <a class="valign-center" [routerLink]="[navItem.route]" class="valign-center"
+                [routerLinkActive]="['navbar-active']">
+                <i class="material-icons">{{ navItem.icon }}</i><span>{{ navItem.header }}</span>
+            </a>
+        </li>
+        <li *ngFor="let navItem of rightNavItems">
+            <a *ngIf="navItem.header != 'Order Status'" [routerLink]="[navItem.route]" class="valign-center"
+                [routerLinkActive]="['navbar-active']">
+                <i class="material-icons">{{ navItem.icon }}</i><span>{{ navItem.header }}</span><i
+                    class="material-icons">{{ navItem.icon }}</i>
+            </a>
+            <a *ngIf="navItem.header == 'Order Status' && layoutService.isDesktop()" class="valign-center"
+                [popover]="popTemplate" placement="bottom">
+                {{navItem.header}}
+            </a>
+            <a href="/order/details" *ngIf="navItem.header == 'Order Status' && layoutService.isMobile()" class="valign-center">
+                <i class="material-icons">{{ navItem.icon }}</i><span>{{ navItem.header }}</span>
+            </a>
+        </li>
+    </ul>
+    <div class="desktop-only">
+        <ul>
+            <li *ngFor="let navItem of leftNavItems" class="left-item">
+                <a class="valign-center" [routerLink]="[navItem.route]" class="valign-center"
+                    [routerLinkActive]="['navbar-active']">
+                    <i class="material-icons">{{ navItem.icon }}</i><span>{{ navItem.header }}</span>
+                    <i class="material-icons">
+                        keyboard_arrow_down
+                        </i>
+                </a>
+            </li>
+        </ul>
+        <ul>
+            <li *ngFor="let navItem of rightNavItems" class="right-item">
+                <a *ngIf="navItem.header != 'Order Status'" [routerLink]="[navItem.route]" class="valign-center"
+                    [routerLinkActive]="['navbar-active']">
+                    <i class="material-icons icon-before" *ngIf="navItem.icon!==''">{{ navItem.icon }}</i><span>{{ navItem.header }}</span>
+                    <span class="material-icons">
+                        keyboard_arrow_down
+                        </span>
+                </a>
+                <a *ngIf="navItem.header == 'Order Status' && layoutService.isDesktop()" class="valign-center"
+                    [popover]="popTemplate" placement="bottom">
+                    {{navItem.header}}<span><i class="material-icons">
+                        keyboard_arrow_down
+                        </i></span>
+                </a>
+                <a *ngIf="navItem.header == 'Order Status' && layoutService.isMobile()" class="valign-center"
+                    [routerLink]="[navItem.route]" [routerLinkActive]="['navbar-active']">
+                    <i class="material-icons">{{ navItem.icon }}</i><span>{{ navItem.header }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<ng-template #popTemplate>
+    <app-order-summary></app-order-summary>
+</ng-template>

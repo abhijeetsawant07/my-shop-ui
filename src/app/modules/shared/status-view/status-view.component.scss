@@ -1,0 +1,32 @@
+.track-line-progress {
+    height: 2px !important;
+    background-color: grey
+}
+
+.track-line-done {
+    height: 2px !important;
+    background-color: blue
+}
+.status-progress {
+    color: grey;
+    display: flex;
+    justify-content: center;
+    //background-color: red;
+}
+
+.status-done {
+    color: blue;
+    display: flex;
+    justify-content: center;
+    //background-color: red;
+}
+
+.status-text-progress {
+    color: grey;
+    //background-color: red;
+}
+
+.status-text-done {
+    color: black;
+    //background-color: red;
+}

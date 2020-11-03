@@ -1,0 +1,28 @@
+<div>
+    <div class="d-flex flex-row top">
+        <div class="d-flex flex-column">
+            <div [ngClass]="isOrdered ? 'status-done' : 'status-progress' ">
+                <i class="material-icons">label</i></div>
+            <div>
+                <hr class="flex-fill" [ngClass]="isOrdered ? 'track-line-done' : 'track-line-progress' ">
+            </div>
+            <div [ngClass]="isOrdered ? 'status-text-done' : 'status-text-progress'">Ordered</div>
+        </div>
+        <div class="ml-2 d-flex flex-column">
+            <div [ngClass]="isShipped ? 'status-done' : 'status-progress' ">
+                <i class="material-icons">local_shipping</i></div>
+            <div>
+                <hr class="flex-fill" [ngClass]="isShipped ? 'track-line-done' : 'track-line-progress' ">
+            </div>
+            <div [ngClass]="isShipped ? 'status-text-done' : 'status-text-progress'">Shipped</div>
+        </div>
+        <div class="ml-2 d-flex flex-column">
+            <div [ngClass]="isDelivered ? 'status-done' : 'status-progress' ">
+                <i class="material-icons">home</i></div>
+            <div>
+                <hr class="flex-fill" [ngClass]="isDelivered ? 'track-line-done' : 'track-line-progress' ">
+            </div>
+            <div [ngClass]="isDelivered ? 'status-text-done' : 'status-text-progress'">Delivered</div>
+        </div>
+    </div>
+</div>

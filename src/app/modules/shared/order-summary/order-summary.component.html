@@ -1,0 +1,45 @@
+<div class="container-fluid item-container">
+    <div *ngIf="order">
+        <div class="cnt-box mb-3" *ngFor="let item of order.items">
+            <a href="/order/details" class="item-details">
+                <div class="d-flex flex-row">
+                    <div class="mt-3 mr-3"><img width="100" src="..\..\assets\images\iPhone_12_BLU_.png">
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div>
+                            <app-status-view [status]="item.status"></app-status-view>
+                        </div>
+                        <div>
+                            <div *ngIf="isOrdered(item.status)">
+                                <div *ngIf="item.userAcceptedDelay">
+                                    Expected to ship: {{item.estimatedShipDateRange.fromDate | date:'EEE, MMM, dd'}} -
+                                    {{item.estimatedShipDateRange.toDate | date:'EEE, MMM, dd yyyy'}}
+                                </div>
+                                <div *ngIf="!item.userAcceptedDelay">
+                                    Expected to ship: {{item.newEstimatedShipDateRange.fromDate | date:'EEE, MMM, dd'}}
+                                    -
+                                    {{item.newEstimatedShipDateRange.toDate | date:'EEE, MMM, dd yyyy'}}
+                                </div>
+                            </div>
+                            <div *ngIf="isShipped(item.status)">
+                                <div *ngFor="let shipment of order.shipments">
+                                    <div *ngIf="shipment.items.includes(item.id)">
+                                        Expected to deliver:
+                                        {{shipment.estimatedDeliveryDate | date:'EEE, MMM, dd yyyy'}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <b>{{item.name}}</b>
+                            </div>
+                            <div>{{item.skuAttributes.color}} - {{item.skuAttributes.size}}</div>
+                            <div>Qty: {{item.quantity}}</div>
+                            <div *ngIf="item.telephoneNumber">{{item.telephoneNumber}}</div>
+                            <div>{{item.plan}}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
